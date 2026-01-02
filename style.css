@@ -1,11 +1,40 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
+    margin: 0;
+    padding: 0;
     text-align: center;
     font-family: Arial, sans-serif;
     background: #f5f5f5;
 }
 
+.title {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.game-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Responsive canvas */
 canvas {
     background: white;
-    border: 2px solid #000;
-    margin-top: 10px;
+    border: 2px solid black;
+    width: 95vw;
+    max-width: 800px;
+    height: auto;
+    touch-action: none; /* CRITICAL for mobile touch */
+}
+
+button {
+    margin: 12px;
+    padding: 10px 24px;
+    font-size: 16px;
+    cursor: pointer;
 }
