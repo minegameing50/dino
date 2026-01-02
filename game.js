@@ -3,8 +3,8 @@ const ctx = canvas.getContext("2d");
 const restartBtn = document.getElementById("restartBtn");
 
 // Logical canvas size (DO NOT use CSS size here)
-canvas.width = 800;
-canvas.height = 300;
+canvas.width = 1000;
+canvas.height = 375;
 
 // Images
 const runImg = new Image();
@@ -23,19 +23,19 @@ let gameOver = false;
 // Reset game
 function resetGame() {
     player = {
-        x: 60,
-        y: 200,
-        width: 60,
-        height: 60,
+        x: 80,
+        y: 245,
+        width: 90,
+        height: 90,
         vy: 0,
         jumping: false
     };
 
     obstacle = {
         x: canvas.width,
-        y: 210,
-        width: 40,
-        height: 60
+        y: 255,
+        width: 55,
+        height: 85
     };
 
     score = 0;
@@ -92,8 +92,8 @@ function gameLoop() {
     player.y += player.vy;
     player.vy += gravity;
 
-    if (player.y >= 200) {
-        player.y = 200;
+    if (player.y >= 245) {
+        player.y = 245;
         player.vy = 0;
         player.jumping = false;
     }
@@ -144,3 +144,4 @@ function gameLoop() {
 // Start
 resetGame();
 gameLoop();
+
