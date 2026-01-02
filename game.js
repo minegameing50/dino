@@ -45,7 +45,7 @@ function resetGame() {
 // Jump logic
 function jump() {
     if (!player.jumping && !gameOver) {
-        player.vy = -13;
+        player.vy = -20;
         player.jumping = true;
     }
 }
@@ -144,6 +144,7 @@ function gameLoop() {
 // Start
 resetGame();
 gameLoop();
+
 
 
 
