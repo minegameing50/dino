@@ -45,7 +45,7 @@ function resetGame() {
 // Jump logic
 function jump() {
     if (!player.jumping && !gameOver) {
-        player.vy = -15;
+        player.vy = -13;
         player.jumping = true;
     }
 }
@@ -103,9 +103,9 @@ function gameLoop() {
     ctx.drawImage(img, player.x, player.y, player.width, player.height);
 
     // Obstacle
-    if (!gameOver) obstacle.x -= 6;
+    if (!gameOver) obstacle.x -= 8;
 
-    if (obstacle.x < -60) {
+    if (obstacle.x < -80) {
         obstacle.x = canvas.width;
         score++;
 
@@ -144,6 +144,7 @@ function gameLoop() {
 // Start
 resetGame();
 gameLoop();
+
 
 
 
