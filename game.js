@@ -23,8 +23,8 @@ let gameOver = false;
 // Reset game
 function resetGame() {
     player = {
-        x: 80,
-        y: 245,
+        x: 85,
+        y: 285,
         width: 120,
         height: 120,
         vy: 0,
@@ -33,9 +33,9 @@ function resetGame() {
 
     obstacle = {
         x: canvas.width,
-        y: 255,
-        width: 55,
-        height: 85
+        y: 265,
+        width: 65,
+        height: 95
     };
 
     score = 0;
@@ -92,8 +92,8 @@ function gameLoop() {
     player.y += player.vy;
     player.vy += gravity;
 
-    if (player.y >= 245) {
-        player.y = 245;
+    if (player.y >= 285) {
+        player.y = 285;
         player.vy = 0;
         player.jumping = false;
     }
@@ -144,5 +144,6 @@ function gameLoop() {
 // Start
 resetGame();
 gameLoop();
+
 
 
