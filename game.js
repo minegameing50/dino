@@ -2,6 +2,10 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const restartBtn = document.getElementById("restartBtn");
 
+// Logical canvas size (DO NOT use CSS size here)
+canvas.width = 800;
+canvas.height = 300;
+
 // Images
 const runImg = new Image();
 runImg.src = "run.png";
@@ -16,10 +20,10 @@ let score = 0;
 let highScore = localStorage.getItem("highScore") || 0;
 let gameOver = false;
 
-// Initialize / Reset game state
+// Reset game
 function resetGame() {
     player = {
-        x: 50,
+        x: 60,
         y: 200,
         width: 60,
         height: 60,
@@ -38,7 +42,7 @@ function resetGame() {
     gameOver = false;
 }
 
-// Jump logic (shared)
+// Jump logic
 function jump() {
     if (!player.jumping && !gameOver) {
         player.vy = -15;
@@ -46,7 +50,9 @@ function jump() {
     }
 }
 
-// PC keyboard
+/* ===== INPUT HANDLING ===== */
+
+// Keyboard (PC)
 document.addEventListener("keydown", e => {
     if (e.code === "Space") {
         e.preventDefault();
@@ -54,10 +60,10 @@ document.addEventListener("keydown", e => {
     }
 });
 
-// PC mouse click
+// Mouse (PC)
 canvas.addEventListener("mousedown", jump);
 
-// Mobile touch
+// Touch (MOBILE) — FIXED
 canvas.addEventListener("touchstart", e => {
     e.preventDefault();
     jump();
@@ -66,11 +72,11 @@ canvas.addEventListener("touchstart", e => {
 // Restart
 restartBtn.addEventListener("click", resetGame);
 
-// Draw cactus obstacle
+// Draw cactus
 function drawCactus(x, y, w, h) {
     ctx.fillStyle = "#228B22";
 
-    ctx.fillRect(x, y, w, h);               // Main stem
+    ctx.fillRect(x, y, w, h);               // Main
     ctx.fillRect(x - 15, y + 20, 15, 10);   // Left arm
     ctx.fillRect(x - 15, y + 20, 10, 25);
 
@@ -78,7 +84,7 @@ function drawCactus(x, y, w, h) {
     ctx.fillRect(x + w + 5, y + 30, 10, 25);
 }
 
-// Game loop
+// Main loop
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -96,10 +102,8 @@ function gameLoop() {
     const img = player.jumping ? jumpImg : runImg;
     ctx.drawImage(img, player.x, player.y, player.width, player.height);
 
-    // Obstacle movement
-    if (!gameOver) {
-        obstacle.x -= 6;
-    }
+    // Obstacle
+    if (!gameOver) obstacle.x -= 6;
 
     if (obstacle.x < -60) {
         obstacle.x = canvas.width;
@@ -113,7 +117,7 @@ function gameLoop() {
 
     drawCactus(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
-    // Collision detection
+    // Collision
     if (
         player.x < obstacle.x + obstacle.width &&
         player.x + player.width > obstacle.x &&
@@ -124,10 +128,10 @@ function gameLoop() {
     }
 
     // UI
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#000";
     ctx.font = "18px Arial";
-    ctx.fillText("Score: " + score, 10, 20);
-    ctx.fillText("High Score: " + highScore, 10, 40);
+    ctx.fillText("Score: " + score, 10, 22);
+    ctx.fillText("High Score: " + highScore, 10, 44);
 
     if (gameOver) {
         ctx.font = "32px Arial";
