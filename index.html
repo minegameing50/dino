@@ -2,22 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <!-- REQUIRED for mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-    <title>Dino Runner Game</title>
+    <title>Dino Runner</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2 class="title">Tap / Click / Space to Jump</h2>
+<div class="app">
 
-<div class="game-container">
-    <canvas id="game"></canvas>
+    <div class="header">
+        <h2>Tap / Click / Space to Jump</h2>
+    </div>
+
+    <div class="game-wrapper">
+        <canvas id="game"></canvas>
+    </div>
+
+    <div class="controls">
+        <button id="restartBtn">Restart</button>
+    </div>
+
 </div>
-
-<button id="restartBtn">Restart</button>
 
 <script src="game.js"></script>
 </body>
