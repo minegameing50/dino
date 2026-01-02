@@ -25,8 +25,8 @@ function resetGame() {
     player = {
         x: 80,
         y: 245,
-        width: 90,
-        height: 90,
+        width: 120,
+        height: 120,
         vy: 0,
         jumping: false
     };
@@ -144,4 +144,5 @@ function gameLoop() {
 // Start
 resetGame();
 gameLoop();
+
 
