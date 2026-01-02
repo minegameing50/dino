@@ -38,15 +38,32 @@ function resetGame() {
     gameOver = false;
 }
 
-// Controls
-document.addEventListener("keydown", e => {
-    if (e.code === "Space" && !player.jumping && !gameOver) {
+// Jump logic (shared)
+function jump() {
+    if (!player.jumping && !gameOver) {
         player.vy = -15;
         player.jumping = true;
     }
+}
+
+// PC keyboard
+document.addEventListener("keydown", e => {
+    if (e.code === "Space") {
+        e.preventDefault();
+        jump();
+    }
 });
 
-// Restart button
+// PC mouse click
+canvas.addEventListener("mousedown", jump);
+
+// Mobile touch
+canvas.addEventListener("touchstart", e => {
+    e.preventDefault();
+    jump();
+}, { passive: false });
+
+// Restart
 restartBtn.addEventListener("click", resetGame);
 
 // Draw cactus obstacle
@@ -61,7 +78,7 @@ function drawCactus(x, y, w, h) {
     ctx.fillRect(x + w + 5, y + 30, 10, 25);
 }
 
-// Main game loop (ONLY ONE)
+// Game loop
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -106,7 +123,7 @@ function gameLoop() {
         gameOver = true;
     }
 
-    // Score UI
+    // UI
     ctx.fillStyle = "black";
     ctx.font = "18px Arial";
     ctx.fillText("Score: " + score, 10, 20);
@@ -120,6 +137,6 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// Start game
+// Start
 resetGame();
 gameLoop();
