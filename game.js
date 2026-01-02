@@ -33,9 +33,9 @@ function resetGame() {
 
     obstacle = {
         x: canvas.width,
-        y: 265,
-        width: 65,
-        height: 95
+        y: 245,
+        width: 55,
+        height: 85
     };
 
     score = 0;
@@ -144,6 +144,7 @@ function gameLoop() {
 // Start
 resetGame();
 gameLoop();
+
 
 
 
