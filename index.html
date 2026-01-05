@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front Page</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .btn {
+            width: 220px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .Login {
+            background-color: #1abc9c;
+            color: #ffffff;
+        }
+
+        .Login:hover {
+            background-color: #16a085;
+        }
+
+        .Register {
+            background-color: #3498db;
+            color: #ffffff;
+        }
+
+        .Register:hover {
+            background-color: #2980b9;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            .btn {
+                width: 180px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button onclick="fastRedirect('dinogame.html')" class="btn Login">Dino Game</button>
+        <br>
+        <button onclick="fastRedirect('piushgame.html')" class="btn Register">Piyush Game</button>
+    </div>
+
+    <script>
+        function fastRedirect(href) {
+            window.location.href = href;
+        }
+    </script>
+
+</body>
+</html>
