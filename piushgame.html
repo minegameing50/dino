@@ -1,132 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Flappy Bird</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Flappy Bird</title>
+
+<style>
+    body {
+        margin: 0;
+        background: #111;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        touch-action: manipulation;
+    }
+
+    canvas {
+        background: #70c5ce;
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
 </head>
+
 <body>
-<canvas id="canvas" width="500" height="800" style="border:1px solid black;"></canvas>
+
+<canvas id="canvas" width="400" height="600"></canvas>
+
 <script>
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// Bird ki Image load karna
+// Bird Image
 const birdImg = new Image();
 birdImg.src = 'https://uploads.onecompiler.io/449pen73h/449pdz7f6/WhatsApp%20Image%202026-01-05%20at%2014.06.33_c80b45f2.jpg';
 
-let bird = {x: 50, y: 300, vy: 0, w: 70, h: 70}; // Size thoda adjust kiya hai image ke liye
-let pipes = [];
-let score = 0;
-let gameOver = false;
-let frame = 0;
+// Game Variables
+let bird, pipes, score, gameOver, frame;
 
-document.addEventListener('keydown', (e) => {
-    if (e.code == 'Space') {
-        if (gameOver) {
-            restart();
-        } else {
-            bird.vy = -8;
-        }
-    }
-});
-canvas.addEventListener('click', () => {
-    if (gameOver) {
-        restart();
-    } else {
-        bird.vy = -8;
-    }
-});
-
-function restart() {
-    bird.y = 300;
-    bird.vy = 0;
+function init() {
+    bird = { x: 60, y: 250, vy: 0, w: 60, h: 60 };
     pipes = [];
     score = 0;
     gameOver = false;
     frame = 0;
 }
+init();
 
+// Controls (PC + Mobile)
+function jump() {
+    if (gameOver) {
+        init();
+    } else {
+        bird.vy = -8;
+    }
+}
+
+document.addEventListener('keydown', e => {
+    if (e.code === 'Space') jump();
+});
+
+canvas.addEventListener('click', jump);
+canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    jump();
+});
+
+// Game Update
 function update() {
     if (gameOver) return;
-    
+
     frame++;
     bird.vy += 0.4;
     bird.y += bird.vy;
-    
+
+    // Ground & Sky collision
     if (bird.y + bird.h > 520 || bird.y < 0) {
         gameOver = true;
     }
-    
-    if (frame % 90 == 0) {
-        pipes.push({x: 400, top: Math.random()*300 + 50, scored: false});
+
+    // Pipes spawn
+    if (frame % 90 === 0) {
+        pipes.push({
+            x: canvas.width,
+            top: Math.random() * 250 + 50,
+            scored: false
+        });
     }
-    
+
     for (let i = pipes.length - 1; i >= 0; i--) {
         pipes[i].x -= 3;
-        
-        if (!pipes[i].scored && pipes[i].x + 50 < bird.x) {
+
+        if (!pipes[i].scored && pipes[i].x + 52 < bird.x) {
             pipes[i].scored = true;
             score++;
         }
-        
-        if (bird.x < pipes[i].x + 50 && 
+
+        // Collision
+        if (
+            bird.x < pipes[i].x + 52 &&
             bird.x + bird.w > pipes[i].x &&
-            (bird.y < pipes[i].top || bird.y + bird.h > pipes[i].top + 180)) {
+            (bird.y < pipes[i].top ||
+             bird.y + bird.h > pipes[i].top + 180)
+        ) {
             gameOver = true;
         }
-        
-        if (pipes[i].x + 50 < 0) {
+
+        if (pipes[i].x + 52 < 0) {
             pipes.splice(i, 1);
         }
     }
 }
 
+// Draw
 function draw() {
-    ctx.clearRect(0, 0, 400, 600);
-    
-    // Background colors
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Background
     ctx.fillStyle = '#70c5ce';
     ctx.fillRect(0, 0, 400, 520);
+
     ctx.fillStyle = '#ded895';
     ctx.fillRect(0, 520, 400, 80);
-    
-    // Bird Draw karna
+
+    // Bird
     ctx.save();
-    ctx.translate(bird.x + bird.w/2, bird.y + bird.h/2);
-    ctx.rotate(Math.min(Math.max(bird.vy * 0.1, -0.3), 1.2));
-    
-    // Agar image load ho gayi hai toh image dikhao, nahi toh yellow box
+    ctx.translate(bird.x + bird.w / 2, bird.y + bird.h / 2);
+    ctx.rotate(Math.min(Math.max(bird.vy * 0.1, -0.3), 1));
     if (birdImg.complete) {
         ctx.drawImage(birdImg, -bird.w/2, -bird.h/2, bird.w, bird.h);
     } else {
-        ctx.fillStyle = '#fabd31';
+        ctx.fillStyle = 'yellow';
         ctx.fillRect(-bird.w/2, -bird.h/2, bird.w, bird.h);
     }
     ctx.restore();
-    
+
     // Pipes
     ctx.fillStyle = '#5b9a4c';
-    for (let pipe of pipes) {
-        ctx.fillRect(pipe.x, 0, 52, pipe.top);
-        ctx.fillRect(pipe.x, pipe.top + 180, 52, 520 - pipe.top - 180);
+    for (let p of pipes) {
+        ctx.fillRect(p.x, 0, 52, p.top);
+        ctx.fillRect(p.x, p.top + 180, 52, 520 - p.top - 180);
     }
-    
+
     // Score
-    ctx.fillStyle = 'black';
-    ctx.font = '48px Arial';
+    ctx.fillStyle = '#000';
+    ctx.font = '40px Arial';
     ctx.fillText(score, 180, 60);
-    
+
+    // Game Over
     if (gameOver) {
         ctx.fillStyle = 'rgba(0,0,0,0.7)';
         ctx.fillRect(0, 0, 400, 600);
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = '#fff';
         ctx.font = '36px Arial';
-        ctx.fillText('GAME OVER', 90, 280);
-        ctx.fillText('Score: ' + score, 115, 330);
+        ctx.fillText('GAME OVER', 85, 280);
         ctx.font = '24px Arial';
-        ctx.fillText('Click or Space to restart', 70, 380);
+        ctx.fillText('Score: ' + score, 145, 330);
+        ctx.fillText('Tap / Space to Restart', 75, 380);
     }
 }
 
+// Loop
 function loop() {
     update();
     draw();
@@ -135,5 +170,6 @@ function loop() {
 
 loop();
 </script>
+
 </body>
 </html>
