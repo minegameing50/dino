@@ -2,37 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Flappy Bird</title>
 
 <style>
-    body {
+    * {
         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        width: 100vw;
+        height: 100vh;
         background: #111;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        overflow: hidden;
         touch-action: manipulation;
+    }
+
+    #game-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     canvas {
         background: #70c5ce;
-        max-width: 100%;
-        max-height: 100%;
+        display: block;
     }
 </style>
 </head>
 
 <body>
 
-<canvas id="canvas" width="400" height="600"></canvas>
+<div id="game-wrapper">
+    <canvas id="canvas" width="400" height="600"></canvas>
+</div>
 
 <script>
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// Bird Image
+// Load Bird Image
 const birdImg = new Image();
 birdImg.src = 'https://uploads.onecompiler.io/449pen73h/449pdz7f6/WhatsApp%20Image%202026-01-05%20at%2014.06.33_c80b45f2.jpg';
 
@@ -67,7 +81,7 @@ canvas.addEventListener('touchstart', e => {
     jump();
 });
 
-// Game Update
+// Update Game
 function update() {
     if (gameOver) return;
 
@@ -75,12 +89,10 @@ function update() {
     bird.vy += 0.4;
     bird.y += bird.vy;
 
-    // Ground & Sky collision
     if (bird.y + bird.h > 520 || bird.y < 0) {
         gameOver = true;
     }
 
-    // Pipes spawn
     if (frame % 90 === 0) {
         pipes.push({
             x: canvas.width,
@@ -97,7 +109,6 @@ function update() {
             score++;
         }
 
-        // Collision
         if (
             bird.x < pipes[i].x + 52 &&
             bird.x + bird.w > pipes[i].x &&
@@ -113,14 +124,15 @@ function update() {
     }
 }
 
-// Draw
+// Draw Game
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Background
+    // Sky
     ctx.fillStyle = '#70c5ce';
     ctx.fillRect(0, 0, 400, 520);
 
+    // Ground
     ctx.fillStyle = '#ded895';
     ctx.fillRect(0, 520, 400, 80);
 
@@ -148,7 +160,7 @@ function draw() {
     ctx.font = '40px Arial';
     ctx.fillText(score, 180, 60);
 
-    // Game Over
+    // Game Over Screen
     if (gameOver) {
         ctx.fillStyle = 'rgba(0,0,0,0.7)';
         ctx.fillRect(0, 0, 400, 600);
@@ -161,14 +173,26 @@ function draw() {
     }
 }
 
-// Loop
+// Game Loop
 function loop() {
     update();
     draw();
     requestAnimationFrame(loop);
 }
-
 loop();
+
+// 🔥 Mobile & Screen Scaling Fix
+function resizeCanvas() {
+    const scale = Math.min(
+        window.innerWidth / canvas.width,
+        window.innerHeight / canvas.height
+    );
+    canvas.style.transform = `scale(${scale})`;
+    canvas.style.transformOrigin = 'center center';
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 </script>
 
 </body>
